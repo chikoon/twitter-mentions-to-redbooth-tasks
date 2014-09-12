@@ -1,0 +1,7 @@
+redbooth:
+  key:    123456
+  secret: secret
+
+twitter:
+  key:    123456
+  secret: secret
