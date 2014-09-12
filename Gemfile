@@ -23,6 +23,8 @@ end
 
 gem 'jquery-rails'
 
+gem 'pry-rails'
+
 group :test, :development do
 	gem 'rspec-rails'
 	gem 'factory_girl_rails'
