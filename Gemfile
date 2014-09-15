@@ -7,6 +7,7 @@ gem 'rails', '3.2.19'
 
 gem 'sqlite3'
 gem 'rails_config'
+gem 'oauth2'
 
 
 # Gems used only for assets and not required

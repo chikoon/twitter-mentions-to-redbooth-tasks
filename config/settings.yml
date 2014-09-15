@@ -3,5 +3,9 @@ redbooth:
   secret: secret
 
 twitter:
-  key:    123456
-  secret: secret
+twitter:
+  key: 123456
+  secret: shhhhhhhh
+  access_level: read only
+  owner: some_twitter user
+  owner_id: 987654321
