@@ -1,16 +1,22 @@
 twitter:
-  key:          123456
-  secret:       shhhhhhhh
-  app_name:     my_app
-  access_level: read only
-  owner:        some_twitter_screen_name
-  owner_id:     987654321
+  owner:                screen_name
+  owner_id:             twitter_id
+  app_name:             twitter_app_name
+  api_key:              twitter_api_key
+  api_secret:           twitter_api_secret
+  access_token:         twitter_access_token
+  access_token_secret:  twitter_access_token_secret
+  access_level:         Read-only
 
 
 project_management_app:
   redbooth:
     user_name:      somebody@somewhere.com
     password:       123456
-    client_id:      123456
-    client_secret:  shhhhhhhh
+    client_id:      md5clientidhash
+    client_secret:  md5clientsecrethash
+    authorize_url:  https://redbooth.com/oauth2/authorize
+    token_url:      https://redbooth.com/oauth2/token
+    cookie_name:    name_of_auth_cookie
+
 
