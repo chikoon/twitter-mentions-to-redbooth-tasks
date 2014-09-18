@@ -8,6 +8,8 @@ gem 'rails', '3.2.19'
 gem 'sqlite3'
 gem 'rails_config'
 gem 'oauth2'
+gem 'twitter'
+gem 'rest-client'
 
 
 # Gems used only for assets and not required

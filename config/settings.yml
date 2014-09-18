@@ -1,11 +1,16 @@
-redbooth:
-  key:    123456
-  secret: secret
-
 twitter:
-twitter:
-  key: 123456
-  secret: shhhhhhhh
+  key:          123456
+  secret:       shhhhhhhh
+  app_name:     my_app
   access_level: read only
-  owner: some_twitter user
-  owner_id: 987654321
+  owner:        some_twitter_screen_name
+  owner_id:     987654321
+
+
+project_management_app:
+  redbooth:
+    user_name:      somebody@somewhere.com
+    password:       123456
+    client_id:      123456
+    client_secret:  shhhhhhhh
+

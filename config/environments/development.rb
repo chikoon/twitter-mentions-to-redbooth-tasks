@@ -34,4 +34,7 @@ Mentions2tasks::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  config.log_level = :debug
+  # :warn, :info, :debug
 end
