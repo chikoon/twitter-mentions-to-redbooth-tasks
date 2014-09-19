@@ -1,4 +1,8 @@
 Mentions2tasks::Application.routes.draw do
+
+  match ':pm_tool/tasks/for/:screen_name/mentions' => 'mentions#start', :as => :m2t
+  match 'twitter/streaming/stop' => 'mentions#stop', :as => :stop_streaming
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
