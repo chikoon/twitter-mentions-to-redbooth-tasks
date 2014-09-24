@@ -1,13 +1,12 @@
 class MentionsController < ApplicationController
 
   def start
-
     output = {
       pm_tool:      params[:pm_tool],
-      screen_name:  params[:screen_name]
+      screen_name:  params[:screen_name],
+      cookie:       cookies.inspect, 
     }
-
-    logger.debug("good food")
+    # logger.debug("good food")
     render :json => output.to_json
   end
 

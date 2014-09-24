@@ -1,4 +1,4 @@
-class M2tStreamer
+class TweetStreamer
 
   def self.start
     #binding.pry
