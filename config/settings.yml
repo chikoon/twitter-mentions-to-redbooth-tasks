@@ -8,7 +8,6 @@ twitter:
   access_token_secret:  twitter_access_token_secret
   access_level:         Read-only
 
-
 project_management_app:
   redbooth:
     user_name:      somebody@somewhere.com
@@ -18,5 +17,8 @@ project_management_app:
     authorize_url:  https://redbooth.com/oauth2/authorize
     token_url:      https://redbooth.com/oauth2/token
     cookie_name:    name_of_auth_cookie
+    redirect_uri:   https%3A%2F%2Flocalhost%3A3000%2Foauth_tool%2Fcallback
+    project_id:     123456
+    tasklist_id:    654321
 
 
