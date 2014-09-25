@@ -49,7 +49,6 @@ describe Redbooth::Auth do
     it "should be false if access token is close to expiration" do
       allow(auth).to receive(:token_expiration).and_return(DateTime.now + 59.seconds)
       expect(auth.ok?).to be false
-      binding.pry
     end
     describe "#expired?" do
       it "should be true if #token_expiration is at least one minute in the future" do
