@@ -7,6 +7,7 @@ describe Redbooth::Auth do
   }
 
   let(:auth){  Redbooth::Auth.new }
+  let(:bad_url) { "http://asldjfsaldjflwewnfwlehwfsfsjlf.com" }
 
 
   describe "properties" do
@@ -31,7 +32,6 @@ describe Redbooth::Auth do
 
   describe "#ok?" do
     before(:each){
-      @session = "good food"
       allow(auth).to receive(:access_token).and_return('chicken')
     }
     it "should be true if access token is present and not expired" do
@@ -42,7 +42,7 @@ describe Redbooth::Auth do
       allow(auth).to receive(:access_token).and_return(nil)
       expect(auth.ok?).to be false
     end
-    it "should be false if access token is expired" do
+    it "should be false if access token has expired" do
       allow(auth).to receive(:token_expiration).and_return(DateTime.now - 1.hour)
       expect(auth.ok?).to be false
     end
@@ -59,11 +59,28 @@ describe Redbooth::Auth do
   end
 
 
-
-  describe "#authenticate" do
+  describe "#authenticate!" do
     context "fails when" do
-      it "incorrect parameters are received"
-      it "receives an http error"
+      it "user_name or login are missing" do
+        allow(auth.config).to receive(:user_name).and_return(nil)
+        expect(auth).to receive(:get_oauth_cookie)
+        expect{ auth.authenticate! }.to raise_error
+      end
+      it "login and password parameters are missing" do
+        allow(auth.config).to receive(:user_name).and_return(nil)
+        allow(auth.config).to receive(:password).and_return(nil)
+        expect{ auth.authenticate! }.to raise_error
+      end
+      it "#get_cookie receives an http error" do
+        allow(auth.config).to receive(:user_name).and_return("chicken")
+        allow(auth.config).to receive(:password).and_return("egg")
+        allow(auth.config).to receive(:login_url).and_return(bad_url)
+        expect{ auth.get_oauth_cookie }.to raise_error
+      end
+      it "when login resource fails, no cookie information can be extracted" do
+        allow(auth.config).to receive(:login_url).and_return(bad_url)
+        expect(auth.auth_cookie_name).to be_nil
+      end
     end
 
     describe "succeeds" do

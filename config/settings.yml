@@ -1,3 +1,5 @@
+env: settings
+
 twitter:
   owner:                screen_name
   owner_id:             twitter_id
@@ -14,6 +16,7 @@ project_management_app:
     password:       123456
     client_id:      md5clientidhash
     client_secret:  md5clientsecrethash
+    login_url:      https://redbooth.com/session
     authorize_url:  https://redbooth.com/oauth2/authorize
     token_url:      https://redbooth.com/oauth2/token
     cookie_name:    name_of_auth_cookie
