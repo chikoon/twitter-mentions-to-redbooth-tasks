@@ -14,6 +14,7 @@ class OauthRedboothController < ApplicationController
     rescue => e
       fail("oauth2_tokens", e.message)
     end
+    #JSON.parse(response.body)
     binding.pry
     # logger.debug("good food")
     redirect_to authorize_url
@@ -28,8 +29,6 @@ class OauthRedboothController < ApplicationController
       :grant_type => 'authorization',
       :redirect_uri => config.redirect_uri
     }
-    logger.debug(args)
-    binding.pry
     response = RestClient.post( "#{config.token_url}", args )
   end
 

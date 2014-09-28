@@ -2,15 +2,20 @@ require 'rails_helper'
 
 RSpec.describe MentionsController, :type => :controller do
 
-  describe "search" do
-    it "GET returns http success" do
-      #get '/redbooth/tasks/for/chicken/mentions'
-      get :search, { :screen_name => 'chicken', :pm_tool => 'redbooth' }
-      expect(response).to have_http_status(:success)
+  describe "authenticated search" do
+
+    before(:each) do
+      allow(@controller).to receive(:authenticated?).and_return(true)
     end
-    it "POST returns http success" do
+    
+    it "POST redirects to a GET request" do
       #post '/:pm_tool/search/mentions', { :screen_name => 'chicken' }
       post :search, { :screen_name => 'chicken', :pm_tool => 'redbooth' }
+      expect(response).to have_http_status(302)
+    end
+    it "GET returns http success with valid parameters" do
+      #get '/redbooth/tasks/for/chicken/mentions'
+      get :search, { :screen_name => 'chicken', :pm_tool => 'redbooth' }
       expect(response).to have_http_status(:success)
     end
     it "fails when pm_tool parameter is invalid" do
@@ -19,10 +24,11 @@ RSpec.describe MentionsController, :type => :controller do
       expect(JSON.parse(response.body)['error']).to eq 'invalid_param'
     end
     it "fails when screen_name parameter is missing" do
-      post :search, { :screen_name => nil, :pm_tool => 'chicken' }
+      post :search, { :screen_name => '', :pm_tool => 'chicken' }
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body)['error']).to eq 'missing_param'
     end
+
   end
 
 end

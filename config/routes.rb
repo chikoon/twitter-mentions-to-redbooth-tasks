@@ -1,7 +1,5 @@
 Mentions2tasks::Application.routes.draw do
 
-  get "oauth_twitter/callback"
-
   post ':pm_tool/search/mentions' => 'mentions#search',          :as => :search_streaming
   get  ':pm_tool/tasks/for/:screen_name/mentions' => 'mentions#search', :as => :start_streaming
   get  'twitter/streaming/stop'  => 'mentions#stop',             :as => :stop_streaming

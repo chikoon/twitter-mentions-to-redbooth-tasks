@@ -14,7 +14,12 @@ class GenericAuth
 
     def authenticate
       # override me
-      raise "Auth modules must implement the authenticated method"
+      raise "Auth modules must implement the authenticate method"
+    end
+
+    def refresh
+      #overrideme
+      raise "Auth modules must implement the refresh method"
     end
 
     def authenticated?; (access_token.present? && !expired?); end

@@ -1,12 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-
   attr_reader   :twitter_auth, :pm_tool_auth
-
-  before_filter :pm_tool,
-                :pm_tool_auth,
-                :twitter_auth,
-                :authenticate!
+  before_filter :pm_tool, :pm_tool_auth, :twitter_auth
 
   def initialize(args={})
   end
@@ -33,12 +28,20 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticated?
-    return if twitter_auth.authenticated? && pm_tool_auth.authenticated?
+    return true if pm_tool_auth.authenticated? # &&twitter_auth.authenticated? 
+    false
   end
 
   def authenticate
     # override me
-    return false
+    # save the original url in session to be called in the oauth_callback function
+    binding.pry
+    unless pm_tool_auth.authenticated?
+      redirect_to "/oauth/#{pm_tool}"
+    end
+    #unless twitter_auth.authenticated?
+    #  redirect_to "/oauth/twitter"
+    #end
   end
 
   def authenticate!
