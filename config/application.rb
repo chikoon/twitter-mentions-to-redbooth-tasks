@@ -60,7 +60,8 @@ module Mentions2tasks
     config.assets.version = '1.0'
 
     #config.force_ssl = true
-    config.autoload_paths += Dir["#{Rails.root}/lib/twitter"]
-    config.autoload_paths += Dir.glob("#{Rails.root}/lib/pm_tools/**/*.rb").each { |f| require f }
+    config.autoload_paths += Dir.glob("#{Rails.root}/lib/*.rb").each { |f| require f }
+    #config.autoload_paths += Dir["#{Rails.root}/lib/twitter"]
+    #config.autoload_paths += Dir.glob("#{Rails.root}/app/models/**/*.rb").each { |f| require f }
   end
 end

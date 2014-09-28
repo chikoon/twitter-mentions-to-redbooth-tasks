@@ -1,31 +1,30 @@
 class MentionsController < ApplicationController
-  before_filter :authenticate!
-  attr_accessor :auth
 
+  def initialize
+    super
+  end
 
-  def start
-    output = {
+  def search
+    return unless valid_search_params?
+    render :json => {
       pm_tool:      params[:pm_tool],
       screen_name:  params[:screen_name],
       cookie:       cookies.inspect
-    }
-    # logger.debug("good food")
-    render :json => output.to_json
+    }.to_json
+  end
+
+  def valid_search_params?
+    fail("missing_param", "Expected a :screen_name parameter") and return false unless params[:screen_name].present?
+    fail("invalid_param", "Invalid or missing :pm_tool parameter.") and return false unless valid_provider? params[:pm_tool]
+    true
   end
 
   def stop
 
   end
 
-  #def auth; @auth; end
-
-  def authenticate!
-    auth = Redbooth::Auth.new
-    begin
-      auth.authenticate!
-    rescue => e
-      render json: { :error => "auth_error", :message => "#{e.message}" }
-    end
+  def about
   end
+
 
 end

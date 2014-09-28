@@ -1,9 +1,10 @@
+app_name: mentions2tasks
+provider: redbooth
 filename: settings
 
 twitter:
   owner:                screen_name
   owner_id:             twitter_id
-  app_name:             twitter_app_name
   api_key:              twitter_api_key
   api_secret:           twitter_api_secret
   access_token:         twitter_access_token
@@ -20,7 +21,7 @@ project_management_app:
     authorize_url:  https://redbooth.com/oauth2/authorize
     token_url:      https://redbooth.com/oauth2/token
     cookie_name:    name_of_auth_cookie
-    redirect_uri:   https%3A%2F%2Flocalhost%3A3000%2Foauth_tool%2Fcallback
+    redirect_uri:   http%3A%2F%2Flocalhost%3A3000%2Foauth%2Fredbooth%2Fcallback
     project_id:     123456
     tasklist_id:    654321
 

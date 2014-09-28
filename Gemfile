@@ -10,7 +10,7 @@ gem 'rails_config'
 gem 'oauth2'
 gem 'twitter'
 gem 'rest-client'
-gem 'thin'
+#gem 'thin'
 
 
 # Gems used only for assets and not required
