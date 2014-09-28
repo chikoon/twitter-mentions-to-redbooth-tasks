@@ -15,7 +15,7 @@ class MentionsController < ApplicationController
 
   def valid_search_params?
     fail("missing_param", "Expected a :screen_name parameter") and return false unless params[:screen_name].present?
-    fail("invalid_param", "Invalid or missing :pm_tool parameter.") and return false unless valid_provider? params[:pm_tool]
+    fail("invalid_param", "Invalid or missing :pm_tool parameter.") and return false unless valid_pm_tool? params[:pm_tool]
     true
   end
 

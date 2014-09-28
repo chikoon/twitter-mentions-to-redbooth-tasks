@@ -1,5 +1,5 @@
 app_name: mentions2tasks
-provider: redbooth
+pm_tool:  redbooth
 filename: settings
 
 twitter:
@@ -13,14 +13,11 @@ twitter:
 
 project_management_app:
   redbooth:
-    user_name:      somebody@somewhere.com
-    password:       123456
     client_id:      md5clientidhash
     client_secret:  md5clientsecrethash
     login_url:      https://redbooth.com/session
     authorize_url:  https://redbooth.com/oauth2/authorize
     token_url:      https://redbooth.com/oauth2/token
-    cookie_name:    name_of_auth_cookie
     redirect_uri:   http%3A%2F%2Flocalhost%3A3000%2Foauth%2Fredbooth%2Fcallback
     project_id:     123456
     tasklist_id:    654321

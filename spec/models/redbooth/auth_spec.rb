@@ -10,12 +10,11 @@ describe Redbooth::Auth do
   let(:bad_url) { "http://asldjfsaldjflwewnfwlehwfsfsjlf.com" }
 
   describe "properties" do
-    it "#provider should contain the provider name" do
-      expect(auth.provider).to eq 'redbooth'
-      expect(auth.config.user_name).to eq 'mike@chikoon.com'
+    it "#oauth_client should return \"redbooth\"" do
+      expect(auth.oauth_client).to eq 'redbooth'
     end
     it "#config should be a shortcut to configuration" do
-      expect(auth.config).to eq Settings.project_management_app.redbooth
+      expect(auth.config).to eq Settings.project_management_app["#{auth.oauth_client}"]
     end
     it "access_token data should be nil by default" do
       %w(access_token refresh_token token_expires).each { |prop|
@@ -23,7 +22,7 @@ describe Redbooth::Auth do
       }
     end
     it "necessary login configuration must be present" do
-      %w(user_name password client_id client_secret authorize_url token_url cookie_name redirect_uri).each { |prop|
+      %w(client_id client_secret authorize_url token_url redirect_uri).each { |prop|
         expect(auth.config.send(prop)).to_not be nil
       }
     end

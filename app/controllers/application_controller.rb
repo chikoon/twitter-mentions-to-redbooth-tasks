@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
 
   attr_reader   :twitter_auth, :pm_tool_auth
 
-  before_filter :provider,
-                :twitter_auth,
+  before_filter :pm_tool,
                 :pm_tool_auth,
+                :twitter_auth,
                 :authenticate!
 
   def initialize(args={})
@@ -16,12 +16,12 @@ class ApplicationController < ActionController::Base
     render :json => { 'error' => code, 'messsage'=>msg }
   end
 
-  def valid_provider?(name='chicken')
+  def valid_pm_tool?(name='chicken')
     Settings.project_management_app["#{name}"].present?
   end
 
-  def provider
-    @provider ||= Settings.provider
+  def pm_tool
+    @pm_tool ||= Settings.pm_tool
   end
 
   def twitter_auth
@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def pm_tool_auth
-    @pm_tool_auth ||= "#{provider.capitalize}::Auth".constantize.new( { :session => session } )
+    @pm_tool_auth ||= "#{pm_tool.capitalize}::Auth".constantize.new( { :session => session } )
   end
 
   def authenticated?
@@ -42,11 +42,8 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate!
+    return if authenticated?
     authenticate
-    # override me
-    #fail("auth_error", "#{provider.capitalize} authentication failed") and return unless authenticated?
-    #fail('auth_error', 'Twitter authentication failed') and return unless twitter_auth.authenticate
-    #fail('auth_error', "#{provider.capitalize} authentication failed") and return false unless pm_tool_auth.authenticate
   end
 
 end

@@ -6,8 +6,9 @@ module Redbooth
     attr_accessor :code
 
     def initialize(args={})
-      args[:provider] = 'redbooth'
+      args[:oauth_client] = 'redbooth'
       super(args)
+      @config = Settings.project_management_app["#{oauth_client}"]
     end
 
     def authenticate
