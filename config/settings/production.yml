@@ -1,1 +1,21 @@
-filename: production
+filename: production.local
+app_name: mentions2tasks
+
+twitter:
+  owner:                twikoon
+  owner_id:             <%= ENV['TWITTER_OWNER_ID'] %>
+  api_key:              <%= ENV['TWITTER_API_KEY'] %>
+  api_secret:           <%= ENV['TWITTER_API_SECRET'] %>
+  access_token:         <%= ENV['TWITTER_ACCESS_TOKEN'] %>
+  access_token_secret:  <%= ENV['TWITTER_ACCESS_TOKEN_SECRET'] %>
+  access_level:         Read-only
+
+project_management_app:
+  redbooth:
+    client_id:      <%= ENV['REDBOOTH_CLIENT_ID'] %>
+    client_secret:  <%= ENV['REDBOOTH_CLIENT_SECRET'] %>
+    authorize_url:  https://redbooth.com/oauth2/authorize
+    token_url:      https://redbooth.com/oauth2/token
+    redirect_uri:   http://mentions2tasks.herokuapp.com/oauth/redbooth/callback
+    project_id:     1281277
+    tasklist_id:    2524340
