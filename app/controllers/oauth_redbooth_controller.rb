@@ -8,7 +8,6 @@ class OauthRedboothController < ApplicationController
     Rails.logger.debug(params)
     return if callback_error
     return unless result = get_tokens
-    binding.pry
     session['redbooth'] = {
       :access_token  => result['access_token'],
       :refresh_token => result['refresh_token'],
