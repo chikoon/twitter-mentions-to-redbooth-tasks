@@ -1,18 +1,22 @@
 class MentionsController < ApplicationController
-  attr_reader   :twitter_auth, :pm_tool_auth
+  attr_reader   :twitter_auth, :pm_tool_auth, :pm_api, :twitter_api
   before_filter :pm_tool, :pm_tool_auth, :twitter_auth, :authenticate!, :only => :search
 
-  #def initialize; super; end
+  def initialize; super; end
 
   def search
     return unless valid_search_params?
     data = session.clone
     data.delete(:session_id)
-    render :json => {
-      pm_tool:      params[:pm_tool],
-      screen_name:  params[:screen_name],
-      data:         data
-    }.to_json
+    output = {
+      "pm_tool:"    => params[:pm_tool],
+      "screen_name" => params[:screen_name],
+      "#{pm_tool}"  => {
+          'auth'      => data["#{params[:pm_tool]}"],
+          'user_info' => pm_tool_api.me
+      }
+    }
+    render :json => output
   end
 
   def posted_search
@@ -54,6 +58,9 @@ class MentionsController < ApplicationController
 
   def pm_tool_auth
     @pm_tool_auth ||= "#{pm_tool.capitalize}::Auth".constantize.new( session.to_h )
+  end
+  def pm_tool_api
+    @pm_tool_api ||= "#{pm_tool.capitalize}::Api".constantize.new( pm_tool_auth.access_token )
   end
   #-------------------------------------------------------------------------------------
 
