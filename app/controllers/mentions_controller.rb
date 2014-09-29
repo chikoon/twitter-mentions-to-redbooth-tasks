@@ -17,7 +17,7 @@ class MentionsController < ApplicationController
 
   def posted_search
     return unless valid_search_params?
-    redirect_to "/#{params[:pm_tool]}/tasks/for/#{params[:screen_name]}/mentions" 
+    redirect_to start_streaming_url :pm_tool => params[:pm_tool], :screen_name => params[:screen_name] 
   end
 
   def stop
