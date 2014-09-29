@@ -21,7 +21,7 @@ class OauthRedboothController < ApplicationController
     if params[:error].present? || !params[:code].present? 
       message = (params[:error_description].present?) ?  params[:error_description] : "Unable to retreive oauth code"
       Rails.logger.warn('message');
-      flash[:error] = message
+      flash[:alert] = message
       redirect_to root_url
       return true
     else

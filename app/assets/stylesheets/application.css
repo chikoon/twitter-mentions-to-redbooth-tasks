@@ -80,3 +80,7 @@ ul.nav li a {
     width: 100px;
     height: 40px;
 }
+
+#page {
+  width:500px; margin:auto; margin-top:50px;
+}
