@@ -12,8 +12,8 @@ class MentionsController < ApplicationController
       "pm_tool:"    => params[:pm_tool],
       "screen_name" => params[:screen_name],
       "#{pm_tool}"  => {
-          'auth'      => data["#{params[:pm_tool]}"],
-          'user_info' => pm_tool_api.me
+          'auth' => data["#{params[:pm_tool]}"],
+          'user' => pm_tool_api.me
       }
     }
     render :json => output
@@ -62,6 +62,7 @@ class MentionsController < ApplicationController
   def pm_tool_api
     @pm_tool_api ||= "#{pm_tool.capitalize}::Api".constantize.new( pm_tool_auth.access_token )
   end
+
   #-------------------------------------------------------------------------------------
 
 

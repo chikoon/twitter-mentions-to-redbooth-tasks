@@ -2,7 +2,11 @@ require 'rails_helper'
 
 RSpec.describe MentionsController, :type => :controller do
 
-  describe "authenticated search" do
+  describe "authenticated redbooth search" do
+    let(:pm_tool){ "redbooth" }
+    let(:user_json){ Rails.root.join('fixtures', pm_tool, 'user.json') }
+    let(:access_token){ 'fuzzywuzzywasabear' }
+    let(:pm_tool_api){ instance_double("Redbooth::Api") }
 
     before(:each) do
       allow(@controller).to receive(:authenticated?).and_return(true)
@@ -10,12 +14,14 @@ RSpec.describe MentionsController, :type => :controller do
     
     it "POSTed search redirects to a GET request" do
       #post '/:pm_tool/search/mentions', { :screen_name => 'chicken' }
-      post :posted_search, { :screen_name => 'chicken', :pm_tool => 'redbooth' }
+      post :posted_search, { :screen_name => 'chicken', :pm_tool => pm_tool }
       expect(response).to have_http_status(302)
     end
     it "GET returns http success with valid parameters" do
       #get '/redbooth/tasks/for/chicken/mentions'
-      get :search, { :screen_name => 'chicken', :pm_tool => 'redbooth' }
+      allow(Redbooth::Api).to receive(:new).and_return(pm_tool_api)
+      allow(pm_tool_api).to receive(:me).and_return(user_json)
+      get :search, { :screen_name => 'chicken', :pm_tool => pm_tool, :access_token => access_token }
       expect(response).to have_http_status(:success)
     end
     it "fails when pm_tool parameter is invalid" do

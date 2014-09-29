@@ -1,0 +1,34 @@
+[
+  {
+    "type": "Task",
+    "created_at": 1409818082,
+    "updated_at": 1409818082,
+    "id": 14424828,
+    "name": "Read Redbooth Api docs",
+    "task_list_id": 2524340,
+    "comments_count": 0,
+    "assigned_id": null,
+    "is_private": false,
+    "project_id": 1281277,
+    "urgent": false,
+    "user_id": 978489,
+    "position": 0,
+    "last_activity_id": 63889961,
+    "record_conversion_type": null,
+    "record_conversion_id": null,
+    "metadata": {
+    },
+    "subtasks_count": 0,
+    "resolved_subtasks_count": 0,
+    "watcher_ids": [
+    978489
+    ],
+    "description": null,
+    "description_html": "",
+    "description_updated_by_user_id": null,
+    "updated_by_id": null,
+    "deleted": false,
+    "status": "new",
+    "due_on": null
+  }
+]

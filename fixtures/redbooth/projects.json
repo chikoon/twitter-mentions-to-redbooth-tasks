@@ -1,0 +1,20 @@
+[
+  {
+    "type": "Project",
+    "created_at": 1409818040,
+    "updated_at": 1409818040,
+    "id": 1281277,
+    "permalink": "mikes-homework",
+    "organization_id": 483300,
+    "archived": false,
+    "name": "Mike's Homework",
+    "description": null,
+    "start_date": null,
+    "end_date": null,
+    "tracks_time": false,
+    "public": null,
+    "publish_pages": false,
+    "settings": {},
+    "deleted": false
+  }
+]

@@ -9,7 +9,7 @@ module Redbooth
 
     def me
       begin
-        response = RestClient.get( "https://redbooth.com/api/3/me?access_token=#{access_token}")
+        response = RestClient.get( "https://redbooth.com/api/3/me?access_token=#{access_token}&format=xml")
       rescue => e
         Rails.logger.warn("http_error: {e.message}")
         return
@@ -18,8 +18,6 @@ module Redbooth
       return Hash.from_xml(response)['user']
     end
 
-    def request
-    end
 
     def fail(code="unexpected", msg="An unexpectd error has occurred")
       raise "#{code}: #{msg}"
