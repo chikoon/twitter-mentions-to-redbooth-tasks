@@ -15,10 +15,9 @@ project_management_app:
   redbooth:
     client_id:      md5clientidhash
     client_secret:  md5clientsecrethash
-    login_url:      https://redbooth.com/session
     authorize_url:  https://redbooth.com/oauth2/authorize
     token_url:      https://redbooth.com/oauth2/token
-    redirect_uri:   http%3A%2F%2Flocalhost%3A3000%2Foauth%2Fredbooth%2Fcallback
+    redirect_uri:   http://localhost:3000/oauth/redbooth/callback
     project_id:     123456
     tasklist_id:    654321
 

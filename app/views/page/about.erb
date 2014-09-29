@@ -1,14 +1,17 @@
 <h1>Twitter Mentions to Redbooth Tasks</h1>
 <h2>app name: mentions2tasks</h2>
 
-<p>
-  <strong>Redbooth auth</strong>: 
-</p>
+<div id="about">
 
-<p>
-  <strong>Twitter auth</strong>: 
-</p>
 
-<form action="/redbooth/search/mentions" method="POST">
-<input name="screen_name" value=""/> <input type="submit" value="Search">
-</form>
+  <div id="form">
+  <form name="f" action="/redbooth/search/mentions" method="POST">
+  <strong>Screen Name:</strong> <input id="#screen_name" name="screen_name" value=""/> <input class="button medium-btn" type="submit" value="Search">
+  </form>
+  </div>
+
+  <p id="auth_info">
+    <strong>Redbooth</strong>: <%= (@session["#{@pm_tool}"].present?)    ? 'Authenticated' : 'Not authenticated yet' %>, 
+    <strong>Twitter auth</strong>: <%= (@session['twitter'].present?) ? 'Authenticated' : 'Not authenticated yet' %>
+  </p>
+</div>

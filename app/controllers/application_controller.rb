@@ -19,4 +19,8 @@ class ApplicationController < ActionController::Base
     session[:target_url] = url
   end
 
+  def pm_tool
+    @pm_tool ||= Settings.pm_tool
+  end
+
 end

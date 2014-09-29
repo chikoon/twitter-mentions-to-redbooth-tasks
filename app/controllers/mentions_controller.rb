@@ -47,9 +47,6 @@ class MentionsController < ApplicationController
   end
 
   #-------------------------------------------------------------------------------------
-  def pm_tool
-    @pm_tool ||= Settings.pm_tool
-  end
 
   def twitter_auth
     @twitter_auth ||= TweetStream::Auth.new( session.to_h )

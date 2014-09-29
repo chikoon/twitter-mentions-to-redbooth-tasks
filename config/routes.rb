@@ -13,7 +13,7 @@ Mentions2tasks::Application.routes.draw do
   get  'oauth/twitter/callback'  => 'oauth_twitter#callback',    :as => :oauth_twitter_callback
 
   get  'about'                   => 'page#about',            :as => :about
-  root :to => 'page#about', :as => :root_path
+  root :to => 'page#about'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
