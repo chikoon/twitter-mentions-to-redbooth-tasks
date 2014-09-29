@@ -1,6 +1,6 @@
 class OauthTwitterController < ApplicationController
 
-  def index
+  def authenticate
     render :json => {}
   end
 
@@ -10,10 +10,8 @@ class OauthTwitterController < ApplicationController
       screen_name:  params[:screen_name]
     }
     # logger.debug("good food")
-    redirect_to :search_streaming  => output
-  end
-
-  def authenticate
+    #render :json => output
+    redirect_to "/"
   end
 
 end

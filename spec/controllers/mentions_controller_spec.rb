@@ -8,9 +8,9 @@ RSpec.describe MentionsController, :type => :controller do
       allow(@controller).to receive(:authenticated?).and_return(true)
     end
     
-    it "POST redirects to a GET request" do
+    it "POSTed search redirects to a GET request" do
       #post '/:pm_tool/search/mentions', { :screen_name => 'chicken' }
-      post :search, { :screen_name => 'chicken', :pm_tool => 'redbooth' }
+      post :posted_search, { :screen_name => 'chicken', :pm_tool => 'redbooth' }
       expect(response).to have_http_status(302)
     end
     it "GET returns http success with valid parameters" do
