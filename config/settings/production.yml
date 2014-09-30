@@ -9,6 +9,11 @@ twitter:
   access_token:         <%= ENV['TWITTER_ACCESS_TOKEN'] %>
   access_token_secret:  <%= ENV['TWITTER_ACCESS_TOKEN_SECRET'] %>
   access_level:         Read-only
+  urls:
+    app_only_auth:  https://api.twitter.com/oauth2/token
+    request_token:  https://api.twitter.com/oauth/request_token
+    authorize:      https://api.twitter.com/oauth/authorize
+    access_token:   https://api.twitter.com/oauth/access_token
 
 project_management_app:
   redbooth:
