@@ -3,8 +3,10 @@ require 'rails_helper'
 RSpec.describe OauthRedboothController, :type => :controller do
 
   describe "succeeds when" do
+    let(:config){ Settings.apps.redbooth }
+    let(:http_root){ config.http_root  }
+    let(:auth_url){ "#{http_root}#{config.auth.path.authorize}" }
     it "GET #authenticate returns http success" do
-      auth_url = Settings.project_management_app.redbooth.authorize_url
       allow(@controller).to receive(:authorize_url).and_return(auth_url)
       get :authenticate
       expect(response).to have_http_status(302)

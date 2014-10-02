@@ -1,8 +1,15 @@
 class OauthRedboothController < ApplicationController
 
-  def authenticate
-    redirect_to authorize_url
+  def authenticate; redirect_to authorize_url; end
+
+  def authorize_url
+    "#{http_base}#{config.auth.path.authorize}?" + 
+      [ "client_id=#{config.auth.client_id}",
+          "redirect_uri=#{callback_url}",
+          "response_type=code"].join("&")
   end
+
+  def callback_url; "#{app_base}#{config.auth.path.redirect}"; end
 
   def callback
     Rails.logger.debug(params)
@@ -30,19 +37,13 @@ class OauthRedboothController < ApplicationController
     end
   end
 
-  def authorize_url
-    "#{config.authorize_url}?client_id=#{config.client_id}&redirect_uri=#{config.redirect_uri}&response_type=code"
-  end
+  def config; @config ||= Settings.apps.redbooth; end
+
+  def http_base; config.http_base; end
 
   def get_tokens
     begin
-      response = RestClient.post( "#{config.token_url}", {
-        :code           => params[:code],
-        :client_id      => config.client_id,
-        :client_secret  => config.client_secret,
-        :grant_type     => 'authorization_code',
-        :redirect_uri   => config.redirect_uri
-      } )
+      response = RestClient.post( get_tokens_url, get_tokens_params )
     rescue => e
       fail("oauth2_tokens", e.message) and return false
     end
@@ -50,9 +51,18 @@ class OauthRedboothController < ApplicationController
     return JSON.parse(response.body)
   end
 
-  def config
-    @config ||= Settings.project_management_app.redbooth
+  def get_tokens_params
+    p = {
+        :code           => params[:code],
+        :client_id      => config.auth.client_id,
+        :client_secret  => config.auth.client_secret,
+        :grant_type     => 'authorization_code',
+        :redirect_uri   => "#{app_base}#{config.auth.path.redirect}"
+    }
+    #p.keys.each{ |k| return false unless p[k].present? }
+    return p
   end
 
+  def get_tokens_url; "#{http_base}#{config.auth.path.token}" end
 
 end

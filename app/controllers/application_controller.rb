@@ -20,7 +20,11 @@ class ApplicationController < ActionController::Base
   end
 
   def pm_tool
-    @pm_tool ||= Settings.pm_tool
+    @pm_tool ||= Settings.app.project_management_tool
+  end
+
+  def app_base
+    Settings.app.http_base
   end
 
 end

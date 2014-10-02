@@ -67,7 +67,7 @@ class MentionsController < ApplicationController
 
 
   def valid_pm_tool?(name='chicken')
-    Settings.project_management_app["#{name}"].present?
+    Settings.apps["#{name}"].present?
   end
 
   def valid_search_params?

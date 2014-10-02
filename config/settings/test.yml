@@ -1,1 +1,2 @@
-filename: test
+app:
+  file_name: test.local

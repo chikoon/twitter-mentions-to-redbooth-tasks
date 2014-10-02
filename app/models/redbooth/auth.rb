@@ -8,7 +8,7 @@ module Redbooth
     def initialize(args={})
       args[:oauth_client] = 'redbooth'
       super(args)
-      @config = Settings.project_management_app["#{oauth_client}"]
+      @config = Settings.apps["#{oauth_client}"]
     end
 
     def authenticate

@@ -1,30 +1,38 @@
-app_name: mentions2tasks
-pm_tool:  redbooth
-filename: settings
+app:
+  app_name:                 mentions2tasks
+  file_name:                settings
+  http_base:                http://somewhere.com:3000
+  project_management_tool:  redbooth
 
-twitter:
-  owner:                screen_name
-  owner_id:             twitter_id
-  api_key:              twitter_api_key
-  api_secret:           twitter_api_secret
-  access_token:         twitter_access_token
-  access_token_secret:  twitter_access_token_secret
-  access_level:         Read-only
-  urls:
-    app_only_auth:  https://api.twitter.com/oauth2/token
-    request_token:  https://api.twitter.com/oauth/request_token
-    authorize:      https://api.twitter.com/oauth/authorize
-    access_token:   https://api.twitter.com/oauth/access_token
+apps:
 
+  twitter:
+    auth:
+      access_token:         ACCESS_TOKEN
+      access_token_secret:  ACCESS_TOKEN_SECRET
+      access_level:         Read-only
+      path:
+        access_token:       /oauth/access_token
+        app_only_auth:      /oauth2/token
+        authorize:          /oauth/authorize
+        request_token:      /oauth/request_token
+    http_base:              https://api.twitter.com
+    user:
+      owner:                OWNER
+      owner_id:             OWNER_ID
+      api_key:              API_KEY
+      api_secret:           API_SECRET
 
-project_management_app:
   redbooth:
-    client_id:      md5clientidhash
-    client_secret:  md5clientsecrethash
-    authorize_url:  https://redbooth.com/oauth2/authorize
-    token_url:      https://redbooth.com/oauth2/token
-    redirect_uri:   http://localhost:3000/oauth/redbooth/callback
-    project_id:     123456
-    tasklist_id:    654321
-
-
+    auth:
+      client_id:            CLIENT_ID
+      client_secret:        CLIENT_SECRET
+      path:
+        authorize:          /oauth2/authorize
+        redirect:           /oauth/redbooth/callback
+        token:              /oauth2/token
+    http_base:              https://redbooth.com
+    user:
+      id:             0
+      project_id:     0
+      task_list_id:   0

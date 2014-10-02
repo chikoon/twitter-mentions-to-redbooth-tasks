@@ -8,13 +8,14 @@ describe Redbooth::Auth do
 
   let(:auth){  Redbooth::Auth.new({ :session => @session }) }
   let(:bad_url) { "http://asldjfsaldjflwewnfwlehwfsfsjlf.com" }
+  let(:config) { auth.config }
 
   describe "properties" do
     it "#oauth_client should return \"redbooth\"" do
       expect(auth.oauth_client).to eq 'redbooth'
     end
     it "#config should be a shortcut to configuration" do
-      expect(auth.config).to eq Settings.project_management_app["#{auth.oauth_client}"]
+      expect(config).to eq Settings.apps["#{auth.oauth_client}"]
     end
     it "access_token data should be nil by default" do
       %w(access_token refresh_token token_expires).each { |prop|
@@ -22,8 +23,11 @@ describe Redbooth::Auth do
       }
     end
     it "necessary login configuration must be present" do
-      %w(client_id client_secret authorize_url token_url redirect_uri).each { |prop|
-        expect(auth.config.send(prop)).to_not be nil
+      %w(client_id client_secret).each { |prop|
+        expect(config.auth.send(prop)).to_not be nil
+      }
+      %w(authorize token redirect).each { |prop|
+        expect(config.auth.path.send(prop)).to_not be nil
       }
     end
   end
