@@ -11,7 +11,10 @@ end
 
 group :production do
   gem 'pg'
+  gem 'rails_12factor'
+  gem 'unicorn'
 end
+
 
 gem 'rails_config'
 gem 'oauth2'
@@ -55,4 +58,5 @@ end
 # gem 'capistrano'
 
 # To use debugger
-# 
+# Heroku says to load this:
+ruby '2.0.0'
