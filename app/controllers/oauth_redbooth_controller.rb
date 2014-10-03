@@ -2,11 +2,13 @@ class OauthRedboothController < ApplicationController
 
   # get auth credentials ----------------------------------------
   def authenticate; redirect_to "#{auth_url}"; end
-  def auth_url; "#{http_base}#{config.auth.path.authorize}?"+ 
+  def auth_url
+    "#{http_base}#{config.auth.path.authorize}?"+ 
       [ "client_id=#{config.auth.client_id}",
         "redirect_uri=#{auth_callback_url}",
         "response_type=code"
-      ].join("&"); end
+      ].join("&"); 
+  end
   def get_auth_tokens
     result = safer_request( 'POST', "#{http_base}#{config.auth.path.auth_token}",
         {

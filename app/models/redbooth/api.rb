@@ -2,13 +2,14 @@ module Redbooth
 
   class Api
 
-
     attr_accessor :access_token
 
     def initialize(token)
       fail("missing param", "Expected :access_token") and return unless token.present?
       @access_token = token
     end
+
+    # api endpoints --------------------------------------------------------------------------
 
     def me
       response = safer_request('GET', "https://redbooth.com/api/3/me?access_token=#{access_token}&format=xml")
@@ -37,7 +38,8 @@ module Redbooth
       response = safer_request("POST", "/tasks?#{args.to_query}")
     end
 
-
+    # helper methods -------------------------------------------------------------------------
+    # To-do: stop duplicating these two methods in this fail and in the application controller
     def safer_request(method, url, params={})
       begin
         case method
@@ -57,6 +59,7 @@ module Redbooth
       render :json => { 'error' => code, 'messsage'=>msg }
       return false;
     end
+
   end
 end
 
