@@ -2,6 +2,7 @@
 module TweetStream
 
   class Auth <  GenericAuth
+    include M2tUtil
 
     def initialize(args={})
       args[:oauth_client] = 'twitter'

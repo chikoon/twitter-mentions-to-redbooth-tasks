@@ -1,4 +1,7 @@
 class MentionsController < ApplicationController
+
+  include M2tUtil
+
   attr_reader   :twitter_auth, :pm_tool_auth, :pm_api, :twitter_api
   before_filter :pm_tool, :pm_tool_auth, :twitter_auth, :authenticate!, :only => :search
 

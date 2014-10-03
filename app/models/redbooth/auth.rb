@@ -3,6 +3,9 @@ module Redbooth
 
   class Auth < GenericAuth
 
+
+    include M2tUtil
+
     attr_accessor :code
 
     def initialize(args={})

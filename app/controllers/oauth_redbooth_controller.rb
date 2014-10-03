@@ -1,5 +1,7 @@
 class OauthRedboothController < ApplicationController
 
+  include M2tUtil
+  
   # get auth credentials ----------------------------------------
   def authenticate; redirect_to "#{auth_url}"; end
   def auth_url

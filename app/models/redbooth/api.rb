@@ -2,6 +2,8 @@ module Redbooth
 
   class Api
 
+    include M2tUtil
+    
     attr_accessor :access_token
 
     def initialize(token)
@@ -36,28 +38,6 @@ module Redbooth
       args[:access_token] = "#{access_token}"  unless args[:access_token].present?
       args.keys{ |k| return nil if !args[k].present? }
       response = safer_request("POST", "/tasks", "#{args.to_json}")
-    end
-
-    # helper methods -------------------------------------------------------------------------
-    # To-do: stop duplicating these two methods in this fail and in the application controller
-    def safer_request(method, url, params={})
-      begin
-        case method
-          when 'GET';  response = RestClient.get( url )
-          when 'POST'; response = RestClient.post( url, params )
-          else;        response = nil
-        end
-      rescue => e
-        return fail("bad response", "#{e.message} ---\n #{response.inspect}")
-      end
-      return fail("http_error", "Request for tokens failes") unless (response && response.code == 200)
-      response
-    end
-
-    def fail(code='unknown', msg='Unexpected Error')
-      Rails.logger.debug("FAILED: #{code} => #{msg}")
-      render :json => { 'error' => code, 'messsage'=>msg }
-      return false;
     end
 
   end
