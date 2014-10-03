@@ -17,6 +17,7 @@ class MentionsController < ApplicationController
       }
     }
     render :json => output
+    return false
   end
 
   def posted_search
@@ -24,9 +25,6 @@ class MentionsController < ApplicationController
     redirect_to start_streaming_url :pm_tool => params[:pm_tool], :screen_name => params[:screen_name] 
   end
 
-  def stop
-
-  end
   #-------------------------------------------------------------------------------------
 
   def authenticate
@@ -40,7 +38,7 @@ class MentionsController < ApplicationController
     #  redirect_to "/oauth/twitter"
     #end
   end
-  
+
   def authenticated?
     pm_tool_auth.authenticated? # && twitter_auth.authenticated?
   end
@@ -59,6 +57,7 @@ class MentionsController < ApplicationController
   def pm_tool_auth
     @pm_tool_auth ||= "#{pm_tool.capitalize}::Auth".constantize.new( session.to_h )
   end
+
   def pm_tool_api
     @pm_tool_api ||= "#{pm_tool.capitalize}::Api".constantize.new( pm_tool_auth.access_token )
   end
@@ -71,8 +70,12 @@ class MentionsController < ApplicationController
   end
 
   def valid_search_params?
-    fail("missing_param", "Expected a :screen_name parameter") and return false unless params[:screen_name].present?
-    fail("invalid_param", "Invalid or missing :pm_tool parameter.") and return false unless valid_pm_tool? params[:pm_tool]
+    unless params[:screen_name].present?
+      return fail("missing_param", "Expected a :screen_name parameter")
+    end
+    unless valid_pm_tool? params[:pm_tool]
+      return fail("invalid_param", "Invalid or missing :pm_tool parameter.")  
+    end
     true
   end
 

@@ -1,68 +1,81 @@
 class OauthRedboothController < ApplicationController
 
-  def authenticate; redirect_to authorize_url; end
-
-  def authorize_url
-    "#{http_base}#{config.auth.path.authorize}?" + 
+  # get auth credentials ----------------------------------------
+  def authenticate; redirect_to "#{auth_url}"; end
+  def auth_url; "#{http_base}#{config.auth.path.authorize}?"+ 
       [ "client_id=#{config.auth.client_id}",
-          "redirect_uri=#{callback_url}",
-          "response_type=code"].join("&")
+        "redirect_uri=#{auth_callback_url}",
+        "response_type=code"
+      ].join("&"); end
+  def get_auth_tokens
+    result = safer_request( 'POST', "#{http_base}#{config.auth.path.auth_token}",
+        {
+          :code           => params[:code],
+          :client_id      => config.auth.client_id,
+          :client_secret  => config.auth.client_secret,
+          :grant_type     => 'authorization_code',
+          :redirect_uri   => auth_callback_url
+        })
+    return fail("http_error", "Request for auth tokens failed") unless result.present?
+    return JSON.parse(result.body)
+  end
+  def auth_callback_url; "#{app_base}#{config.auth.path.auth_callback}"; end
+  def auth_callback; callback { get_auth_tokens }; end
+
+  # refresh  auth credentials ----------------------------------------
+  def refresh
+    response          = safer_request( 'POST', refresh_url, {
+      :code           => params[:code],
+      :client_id      => config.auth.client_id,
+      :refresh_token  => session[:redbooth][:refresh_token],
+      :grant_type     => 'refresh_token',
+      :redirect_uri   => refresh_callback_url
+    })
+    return fail("refresh_error") unless response.present?
+    return JSON.parse(response).body
+  end
+  def refresh_url; "#{http_base}#{config.auth.path.refresh_token}"; end
+  def refresh_callback_url; "#{app_base}#{config.auth.path.refresh_callback}"; end;
+  def refresh_callback
+    callback {
+      {
+        'access_token'  => params[:access_token],
+        'refresh_token' => params[:refresh_token],
+        'expires_in'    => params[:expires_in],
+      }
+    }
   end
 
-  def callback_url; "#{app_base}#{config.auth.path.redirect}"; end
-
-  def callback
-    Rails.logger.debug(params)
-    return if callback_error
-    return unless result = get_tokens
+  # callback handlers ----------------------------------------
+  def callback(&block)
+    result = block.call if block_given?
+    return unless result && result.present? && !callback_error? 
     session['redbooth'] = {
       :access_token  => result['access_token'],
       :refresh_token => result['refresh_token'],
       :token_expires => DateTime.now + result['expires_in'].seconds
     }
-    target_url = get_target_url
-    redirect_to target_url
+    smart_redirect
   end
 
-  def callback_error
-    if params[:error].present? || !params[:code].present? 
-      message = (params[:error_description].present?) ?  params[:error_description] : "Unable to retreive oauth code"
+  def callback_error?
+    if params[:error].present?
+      return false unless  params[:error_description].present?
+      message = "Unable to retreive oauth error description"
+      message = params[:error_description]
       Rails.logger.warn('message');
       flash[:alert] = message
       redirect_to root_url
       return true
     else
       Rails.logger.debug(params)
-      return false
     end
+    return false
   end
+
+  # helper methods ----------------------------------------
 
   def config; @config ||= Settings.apps.redbooth; end
-
   def http_base; config.http_base; end
-
-  def get_tokens
-    begin
-      response = RestClient.post( get_tokens_url, get_tokens_params )
-    rescue => e
-      fail("oauth2_tokens", e.message) and return false
-    end
-    fail("http_error", "Request for tokens failes") and return false unless (response && response.code == 200)
-    return JSON.parse(response.body)
-  end
-
-  def get_tokens_params
-    p = {
-        :code           => params[:code],
-        :client_id      => config.auth.client_id,
-        :client_secret  => config.auth.client_secret,
-        :grant_type     => 'authorization_code',
-        :redirect_uri   => "#{app_base}#{config.auth.path.redirect}"
-    }
-    #p.keys.each{ |k| return false unless p[k].present? }
-    return p
-  end
-
-  def get_tokens_url; "#{http_base}#{config.auth.path.token}" end
 
 end

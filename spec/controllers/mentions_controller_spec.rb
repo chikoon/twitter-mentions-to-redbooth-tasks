@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe MentionsController, :type => :controller do
 
   describe "authenticated redbooth search" do
+
     let(:pm_tool){ "redbooth" }
     let(:user_json){ Rails.root.join('fixtures', pm_tool, 'user.json') }
     let(:access_token){ 'fuzzywuzzywasabear' }
@@ -25,8 +26,9 @@ RSpec.describe MentionsController, :type => :controller do
       expect(response).to have_http_status(:success)
     end
     it "fails when pm_tool parameter is invalid" do
-      get :search, { :screen_name => 'chicken', :pm_tool => 'chicken' }
-      expect(response).to have_http_status(:success)
+      get :search, { :screen_name => 'chicken', :pm_tool => 'egg' }
+      expect(response.code).to eq 200.to_s
+      #have_http_status(:success)
       expect(JSON.parse(response.body)['error']).to eq 'invalid_param'
     end
     it "fails when screen_name parameter is missing" do

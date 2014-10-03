@@ -29,8 +29,10 @@ apps:
       client_secret:        CLIENT_SECRET
       path:
         authorize:          /oauth2/authorize
-        redirect:           /oauth/redbooth/callback
-        token:              /oauth2/token
+        auth_token:         /oauth2/token
+        auth_callback:      /oauth/redbooth/callback
+        refresh_token:      /oauth2/token
+        refresh_callback:   /oauth2/refresh/redbooth/cal
     http_base:              https://redbooth.com
     user:
       id:             0

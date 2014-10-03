@@ -4,16 +4,20 @@ Mentions2tasks::Application.routes.draw do
 
   post ':pm_tool/search/mentions' => 'mentions#posted_search',          :as => :search_streaming
   get  ':pm_tool/tasks/for/:screen_name/mentions' => 'mentions#search', :as => :start_streaming
-  get  'twitter/streaming/stop'  => 'mentions#stop',             :as => :stop_streaming
+  get  'twitter/streaming/stop'  => 'mentions#stop',                    :as => :stop_streaming
 
-  get  'oauth/redbooth'          => 'oauth_redbooth#authenticate',     :as => :oauth_redbooth
-  get  'oauth/redbooth/callback' => 'oauth_redbooth#callback',  :as => :oauth_redbooth_callback
+  get  'oauth/redbooth'          => 'oauth_redbooth#authenticate',      :as => :oauth_redbooth
+  get  'oauth/redbooth/callback' => 'oauth_redbooth#auth_callback',     :as => :oauth_redbooth_callback
+
+  get  'oauth/refresh/redbooth'          => 'oauth_redbooth#refresh' ,   :as => :oauth_redbook_refresh
+  get  'oauth/refresh/redbooth/callback' => 'oauth_redbooth#refresh_callback', :as => :oauth_redbook_refresh_callback
 
   get  'oauth/twitter'           => 'oauth_twitter#authenticate',       :as => :oauth_twitter
-  get  'oauth/twitter/callback'  => 'oauth_twitter#callback',    :as => :oauth_twitter_callback
+  get  'oauth/twitter/callback'  => 'oauth_twitter#callback',           :as => :oauth_twitter_callback
 
   get  'about'                   => 'page#about',            :as => :about
   root :to => 'page#about'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -26,7 +26,7 @@ describe Redbooth::Auth do
       %w(client_id client_secret).each { |prop|
         expect(config.auth.send(prop)).to_not be nil
       }
-      %w(authorize token redirect).each { |prop|
+      %w(authorize auth_callback refresh_token refresh_callback).each { |prop|
         expect(config.auth.path.send(prop)).to_not be nil
       }
     end
