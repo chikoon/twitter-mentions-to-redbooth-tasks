@@ -11,8 +11,9 @@ module Redbooth
       @config = Settings.apps["#{oauth_client}"]
     end
 
-    #def authenticate
-    #end
+    def refresh_token
+      
+    end
 
   end
 end

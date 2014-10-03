@@ -28,24 +28,33 @@ class MentionsController < ApplicationController
   #-------------------------------------------------------------------------------------
 
   def authenticate
-    #binding.pry
     set_target_url(request.original_fullpath)
     unless pm_tool_auth.authenticated?
       redirect_to "/oauth/#{pm_tool}"
       return
     end
-    #unless twitter_auth.authenticated?
-    #  redirect_to "/oauth/twitter"
-    #end
+    unless twitter_auth.authenticated?
+      redirect_to "/oauth/twitter"
+    end
   end
-
+  def refresh
+    pm_tool_auth.refresh_token  if pm_tool_auth.refreshable?
+    twitter_auth.refressh_token if twitter_auth.refreshable?
+  end
+  def refreshable?
+    pm_tool_auth.refreshable? || twitter_auth.refreshable?
+  end
   def authenticated?
-    pm_tool_auth.authenticated? # && twitter_auth.authenticated?
+    pm_tool_auth.authenticated? && twitter_auth.authenticated?
   end
 
   def authenticate!
     return if authenticated?
-    authenticate
+    if refreshable?
+      refresh
+    else
+      authenticate
+    end
   end
 
   #-------------------------------------------------------------------------------------
