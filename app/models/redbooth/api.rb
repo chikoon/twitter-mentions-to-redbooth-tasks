@@ -33,9 +33,9 @@ module Redbooth
       args[:user_id]      = "#{user_id}"       unless args[:user_id].present?
       args[:project_id]   = "#{project_id}"    unless args[:project_id].present?
       args[:task_list_id] = "#{task_list_id}"  unless args[:task_list_id].present?
-      args[:access_token] =  "#{access_token}"            unless args[:access_token].present?
+      args[:access_token] = "#{access_token}"  unless args[:access_token].present?
       args.keys{ |k| return nil if !args[k].present? }
-      response = safer_request("POST", "/tasks?#{args.to_query}")
+      response = safer_request("POST", "/tasks", "#{args.to_json}")
     end
 
     # helper methods -------------------------------------------------------------------------
