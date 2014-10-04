@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TweetStream::Streamer do
+describe TweetStream::Api do
 
   let(:egg){ 'chicken' }
 

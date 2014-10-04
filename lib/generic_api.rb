@@ -1,0 +1,3 @@
+class GenericApi
+
+end

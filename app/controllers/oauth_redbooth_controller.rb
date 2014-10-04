@@ -20,14 +20,15 @@ class OauthRedboothController < ApplicationController
           :grant_type     => 'authorization_code',
           :redirect_uri   => auth_callback_url
         })
-    return fail("http_error", "Request for auth tokens failed") unless result.present?
-    return JSON.parse(result.body)
+    return fail("http_error", "Request for auth tokens failed") unless result
+    return JSON.parse(result)
   end
   def auth_callback_url; "#{app_base}#{config.auth.path.auth_callback}"; end
   def auth_callback; callback { get_auth_tokens }; end
 
   # refresh  auth credentials ----------------------------------------
   def refresh
+    Rails.logger.info("refreshing: ")
     response          = safer_request( 'POST', refresh_url, {
       :code           => params[:code],
       :client_id      => config.auth.client_id,
@@ -35,8 +36,8 @@ class OauthRedboothController < ApplicationController
       :grant_type     => 'refresh_token',
       :redirect_uri   => refresh_callback_url
     })
-    return fail("refresh_error") unless response.present?
-    return JSON.parse(response).body
+    return fail("refresh_error") unless response
+    return JSON.parse(response)
   end
   def refresh_url; "#{http_base}#{config.auth.path.refresh_token}"; end
   def refresh_callback_url; "#{app_base}#{config.auth.path.refresh_callback}"; end;

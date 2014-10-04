@@ -1,13 +1,12 @@
 module Redbooth
 
-  class Api
+  class Api < GenericApi
 
     include M2tUtil
     
     attr_accessor :access_token
 
     def initialize(token)
-      fail("missing param", "Expected :access_token") and return unless token.present?
       @access_token = token
     end
 
@@ -28,7 +27,7 @@ module Redbooth
     end
 
     def tasks
-      response = safer_request("GET", "/tasks?access_token=#{access_token}&user_id=#{user_id}&project_id=#{project_id}")
+      response = safer_request("GET", "tasks?access_token=#{access_token}&user_id=#{user_id}&project_id=#{project_id}")
     end
 
     def create_task(name="new task", args={})
