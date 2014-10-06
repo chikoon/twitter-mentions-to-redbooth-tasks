@@ -9,13 +9,13 @@ module M2tUtil
         else;        response = nil
       end
     rescue => e
-      return fail("bad response", "#{e.message} ---\n #{response.inspect}")
+      return die("bad response", "#{e.message} ---\n #{response.inspect}")
     end
-    return fail("http_error", "Request for tokens failes") unless (response && response.code == 200)
+    return die("http_error", "Request for tokens failes") unless (response && response.code == 200)
     response
   end
 
-  def fail(code='unknown', msg='Unexpected Error')
+  def die(code='unknown', msg='Unexpected Error')
     Rails.logger.error("FAILED: #{code} => #{msg}")
     render :json => { 'error' => code, 'messsage'=>msg }
     return false;

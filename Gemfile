@@ -17,7 +17,7 @@ end
 
 
 gem 'rails_config'
-gem 'oauth2'
+gem 'oauth', '~> 0.4.7'
 gem 'twitter'
 gem 'rest-client'
 gem 'thin'

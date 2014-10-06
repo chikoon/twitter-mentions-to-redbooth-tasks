@@ -4,14 +4,18 @@ class MentionsController < ApplicationController
 
   before_filter :authenticate!, :only => [:search]
 
-  def initialize; super; end
+  def initialize;
+    super
+  end
 
   def search
     return unless valid_search_params?
     data = session.clone
     data.delete(:session_id)
-    #binding.pry
+    twitter_api.track_screen_name
+
     output = {
+      "success"     => "Tracking #{params[:screen_name]}!",
       "pm_tool:"    => params[:pm_tool],
       "screen_name" => params[:screen_name],
       "#{pm_tool}"  => {
@@ -22,6 +26,7 @@ class MentionsController < ApplicationController
         'auth' => twitter_auth
       }
     }
+
     render :json => output
     return false
   end

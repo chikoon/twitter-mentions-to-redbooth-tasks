@@ -4,38 +4,41 @@ module TweetStream
     
     include M2tUtil
     
-    attr_accessor :screen_name, :client, :args
+    attr_accessor :screen_name, :client, :args, :user
     attr_reader   :config
 
     def initialize(a={})
-      super(@args = a)
+      @args = a
       @client       = args[:client]
       @screen_name  = args[:screen_name]
       @query        = screen_name
     end
 
-    #def safe_flow_filter(f=nil)
-    #  return false unless f
-    #  case f.is_a?
-    #    when String
-    #    when Array
-    #    else
-    #  end
-    #  false
-    #end
-    def flow(filter=nil)
-      topics = ["coffee", "tea"]
-      client.filter(:track => topics.join(",")) do |object|
-        binding.pry
-        Rails.logger.debug(object.text) if object.is_a?(Twitter::Tweet)
-      end
+    def track_screen_name
       #binding.pry
-      Rails.logger.debug("#{self.class.name} streamer started!")
+      begin
+        client.filter(:track => "#{screen_name}") do |tweet|
+          next unless tweet.text?
+          Rails.logger.debug("MISS #{screen_name} -> #{tweet.text}")
+          if tweet.text.match("(@#{screen_name})([^a-zA-Z0-9_]|$)")
+            Rails.logger.info("MATCH Track #{screen_name} -> #{tweet.text}")
+            binding.pry
+            created_at = DateTime.now
+            created_at = tweet.created_at if tweet.created?
+            created_by = 'Unknown'
+            created_by = tweet.user.name  if tweet.user? && tweet.user.name?
+            pm_tool_api.create_task(tweet.text, { 
+              :created_at => created_at, 
+              :created_by => created_by,
+              :screen_name => screen_name
+            })
+            binding.pry
+          end
+        end
+      rescue => e
+        Rails.logger.error("Twitter api error: #{e.inspect}")
+      end
     end
 
-    def dont_go_with_the_flow
-      Rails.logger.debug("How to I stop this thing?")
-    end
   end
-
 end
