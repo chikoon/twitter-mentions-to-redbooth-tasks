@@ -24,8 +24,12 @@ class OauthRedboothController < ApplicationController
           :grant_type     => 'authorization_code',
           :redirect_uri   => auth_callback_url
         })
-    return die("http_error", "Request for auth tokens failed") unless result
-    return JSON.parse(result)
+    if result
+      return JSON.parse(result)
+    else 
+      die("http_error", "Request for auth tokens failed")
+      return false
+    end
   end
   def auth_callback_url; "#{app_base}#{config.auth.path.auth_callback}"; end
   def auth_callback; callback { get_auth_tokens }; end
@@ -40,7 +44,10 @@ class OauthRedboothController < ApplicationController
       :grant_type     => 'refresh_token',
       :redirect_uri   => refresh_callback_url
     })
-    return die("http_error", "Request for auth tokens failed") unless response
+    unless response
+      die("http_error", "Request for auth tokens failed")
+      return false
+    end
     result = JSON.parse(response)
     callback {{
       'access_token'  => result['access_token'],

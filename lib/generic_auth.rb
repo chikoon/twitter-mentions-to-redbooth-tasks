@@ -10,8 +10,14 @@ class GenericAuth
   def authenticated?; (access_token.present? && !expired?); end
   def expired?;       !token_expires.present? || (token_expires.to_i < (DateTime.now + 1.minute).to_i); end
   def valid_args?(args={})
-    unless args.is_a? Hash;               return die("missing_argument", "expected a :session hash"); end
-    unless args[:oauth_client].present?;  return die("missing_argument", "expected an :oauth_client argument"); end
+    unless args.is_a? Hash
+      die("missing_argument", "expected a :session hash")
+      return false
+    end
+    unless args[:oauth_client].present?
+      die("missing_argument", "expected an :oauth_client argument")
+      return false  
+    end
     true
   end
 

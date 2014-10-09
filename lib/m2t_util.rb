@@ -10,7 +10,8 @@ module M2tUtil
       end
     rescue => e
       Rails.logger.error("Error: #{e.inspect}")
-      return die("http_error", "Error: #{e.inspect}")
+      die("http_error", "Error: #{e.inspect}")
+      return false
     end
     response
   end

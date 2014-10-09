@@ -45,10 +45,12 @@ class MentionsController < ApplicationController
   def valid_pm_tool?(name='chicken'); Settings.apps["#{name}"].present?; end
   def valid_search_params?
     unless params[:screen_name].present?
-      return die("missing_param", "Expected a :screen_name parameter")
+      die("missing_param", "Expected a :screen_name parameter")
+      return false
     end
     unless valid_pm_tool? params[:pm_tool]
-      return die("invalid_param", "Invalid or missing :pm_tool parameter.")  
+      die("invalid_param", "Invalid or missing :pm_tool parameter.")  
+      return false
     end
     true
   end
@@ -94,7 +96,8 @@ class MentionsController < ApplicationController
         result   = JSON.parse(response)
       rescue => e
         Rails.logger.error("error creating task: #{e.inspect}")
-        return die("#{pm_tool}_error", "Unable to create task -> response: #{response}")
+        die("#{pm_tool}_error", "Unable to create task -> response: #{response}")
+        return false
       end
       Rails.logger.info("Task #{result['id']} created successfully!")
       Rails.logger.debug("Task name: #{result['name']}")
