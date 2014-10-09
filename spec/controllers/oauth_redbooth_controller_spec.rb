@@ -23,13 +23,6 @@ RSpec.describe OauthRedboothController, :type => :controller do
       expect(subject).to redirect_to root_path
     end
 
-#    it "GET #refresh returns http success" do
-#      allow(@controller).to receive(:refresh_url).and_return(refresh_url)
-#      get :refresh
-#      expect(response).to have_http_status(302)
-#      expect(subject).to redirect_to refresh_url
-#    end
-
   end
 
 end

@@ -3,15 +3,17 @@
 
 <div id="about">
 
-
   <div id="form">
   <form name="f" action="/redbooth/search/mentions" method="POST">
-  <strong>Screen Name:</strong> <input id="#screen_name" name="screen_name" value=""/> <input class="button medium-btn" type="submit" value="Search">
+    <strong>Screen Name:</strong> 
+    <input id="#screen_name" name="screen_name" value="<%= (@screen_name) ? @screen_name : '' %>"/> 
+    <input class="button medium-btn" type="submit" value="Search">
   </form>
   </div>
 
   <p id="auth_info">
-    <strong>Redbooth</strong>: <%= (@session["#{@pm_tool}"].present?)    ? 'Authenticated' : 'Not authenticated yet' %>, 
-    <strong>Twitter auth</strong>: <%= (@session['twitter'].present?) ? 'Authenticated' : 'Not authenticated yet' %>
+    <strong>Redbooth</strong>:     <%= (@pm_tool_auth.authenticated?) ? 'Authenticated' : 'Not authenticated yet' %>, 
+    <strong>Twitter auth</strong>: <%= (@twitter_auth.authenticated?) ? 'Authenticated' : 'Not authenticated yet' %>
   </p>
+
 </div>

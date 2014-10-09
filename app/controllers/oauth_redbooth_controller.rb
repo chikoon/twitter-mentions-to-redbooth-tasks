@@ -2,6 +2,10 @@ class OauthRedboothController < ApplicationController
 
   include M2tUtil
   
+  def app_base;  Settings.app.http_base; end
+  def config;    @config ||= Settings.apps.redbooth; end
+  def http_base; config.http_base; end
+  
   # get auth credentials ----------------------------------------
   def authenticate; redirect_to "#{auth_url}"; end
   def auth_url
@@ -36,20 +40,18 @@ class OauthRedboothController < ApplicationController
       :grant_type     => 'refresh_token',
       :redirect_uri   => refresh_callback_url
     })
-    return die("http_error", "Request for auth tokens failed") unless result
-    return JSON.parse(response)
+    return die("http_error", "Request for auth tokens failed") unless response
+    result = JSON.parse(response)
+    callback {{
+      'access_token'  => result['access_token'],
+      'refresh_token' => result['refresh_token'],
+      'expires_in'    => result['expires_in']
+    }}
+    return false
   end
   def refresh_url; "#{http_base}#{config.auth.path.refresh_token}"; end
   def refresh_callback_url; "#{app_base}#{config.auth.path.refresh_callback}"; end;
-  def refresh_callback
-    callback {
-      {
-        'access_token'  => params[:access_token],
-        'refresh_token' => params[:refresh_token],
-        'expires_in'    => params[:expires_in],
-      }
-    }
-  end
+
 
   # callback handlers ----------------------------------------
   def callback(&block)
@@ -77,10 +79,5 @@ class OauthRedboothController < ApplicationController
     end
     return false
   end
-
-  # helper methods ----------------------------------------
-
-  def config; @config ||= Settings.apps.redbooth; end
-  def http_base; config.http_base; end
 
 end

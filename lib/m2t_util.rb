@@ -1,24 +1,26 @@
 module M2tUtil
 
-  def safer_request(method, url, params={})
-    Rails.logger.info("#{method}: #{url} -> #{params.to_query}")
+  def safer_request(method, url, params={}, headers=nil)
+    Rails.logger.debug("Enter safer_request: method: #{method}, url: #{url}, params: #{params.inspect}, headers: #{headers}")
     begin
       case method
-        when 'GET';  response = RestClient.get( url )
-        when 'POST'; response = RestClient.post( url, params )
+        when 'GET';  response = RestClient.get( url, headers )
+        when 'POST'; response = RestClient.post( url, params, headers )
         else;        response = nil
       end
     rescue => e
-      return die("bad response", "#{e.message} ---\n #{response.inspect}")
+      Rails.logger.error("Error: #{e.inspect}")
+      return die("http_error", "Error: #{e.inspect}")
     end
-    return die("http_error", "Request for tokens failes") unless (response && response.code == 200)
     response
   end
 
   def die(code='unknown', msg='Unexpected Error')
     Rails.logger.error("FAILED: #{code} => #{msg}")
-    render :json => { 'error' => code, 'messsage'=>msg }
-    return false;
+    flash[:alert] = "#{code.upcase}: #{msg}"
+    redirect_to root_path
+    #render :json => { 'error' => code, 'message'=>msg }
+    #return false;
   end
 
   def smart_redirect
@@ -30,6 +32,5 @@ module M2tUtil
     session[:target_url]
   end
   def set_target_url(url); session[:target_url] = url; end
-
 
 end

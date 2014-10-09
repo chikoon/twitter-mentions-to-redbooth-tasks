@@ -3,54 +3,59 @@ module Redbooth
   class Api < GenericApi
 
     include M2tUtil
-    
-    attr_accessor :access_token
+    attr_accessor :access_token, :http_base, :auth, :pm_tool, :screen_name
 
-    def initialize(token)
-      @access_token = token
+    def initialize(screen_name, auth)
+      @pm_tool      = 'redbooth'
+      @auth         = auth
+      @access_token = auth.access_token
+      @http_base    = 'https://redbooth.com/api/3/'
+      @screen_name  = screen_name
     end
 
-    # api endpoints --------------------------------------------------------------------------
+def create_task(tweet)
+    Rails.logger.debug("Enter create task: tweet => #{tweet.inspect}")
+    conf      = Settings.apps["#{pm_tool}"].user
+    creator   = (tweet.user? && tweet.user.name?) ? tweet.user.name : 'Unknown'
+    created   = (tweet.created?) ? tweet.created_at : DateTime.now
+    task_name = "#{creator} mentioned @#{screen_name} on #{created.strftime('%m/%d/%Y')} at #{created.strftime('%I:%M%p')}."
+    args = {
+      :project_id   => conf[:project_id],
+      :task_list_id => conf[:task_list_id],
+      :name         => task_name,
+      :description  => tweet.text,
+      :access_token => auth.access_token,
+      :format       => 'json'
+    }
+    headers = { :content_type => :json, :Authorizaton => "Bearer #{auth.access_token}" }
+    safer_request("POST", "https://redbooth.com/api/3/tasks", args.to_json, headers)
+  end
 
+    # redbooth api endpoints -----------------------------------------------------------------
     def me
-      response = safer_request('GET', "https://redbooth.com/api/3/me?access_token=#{access_token}&format=xml")
-      return nil unless (response && response.code == 200)
-      return Hash.from_xml(response)['user']
+      response = safer_request('GET', "#{http_base}me?access_token=#{access_token}&format=xml")
+      return handle_response(response)
     end
 
     def projects user_id
-      response = safer_request("GET", "projects?access_token=#{access_token}&user_id=#{user_id}")
+      response = safer_request("GET", "#{http_base}projects?access_token=#{access_token}&user_id=#{user_id}")
+      return handle_response(response)
     end
 
     def task_lists user_id, project_id
-      response = safer_request("GET", "task_lists?access_token=#{access_token}&user_id=#{user_id}&project_id=#{project_id}")
+      response = safer_request("GET", "#{http_base}task_lists?access_token=#{access_token}&user_id=#{user_id}&project_id=#{project_id}")
+      return handle_response(response)
     end
 
     def tasks
-      response = safer_request("GET", "tasks?access_token=#{access_token}&user_id=#{user_id}&project_id=#{project_id}")
+      response = safer_request("GET", "#{http_base}tasks?access_token=#{access_token}&user_id=#{user_id}&project_id=#{project_id}")
+      return handle_response(response)
     end
 
-    def create_task(tweet, args={})
-      #args[:user_id]      = "#{user_id}"       unless args[:user_id].present?
-      #args[:project_id]   = "#{project_id}"    unless args[:project_id].present?
-      #args[:task_list_id] = "#{task_list_id}"  unless args[:task_list_id].present?
-      #args[:access_token] = "#{access_token}"  unless args[:access_token].present?
-      binding.pry
-      conf = Settings.apps["#{pm_tool}"].user
-
-      args[:user_id]      = conf[:id]
-      args[:project_id]   = conf[:project_id]
-      args[:task_list]    = conf[:task_list_id]
-      args[:tweeter]      = args[:created_by]
-      args[:created]      = args[:created_at]
-      args
-      
-      args.keys{ |k| return nil if !args[k].present? }
-
-      args[:name]         = "Tweet for #{args[:screen_name]} created by #{args[:tweeter]} at #{args[:created]}."
-      args[:description]  = tweet
-      binding.pry
-      response = safer_request("POST", "/tasks", "#{args.to_json}")
+    # response handler -----------------------------------------------------------------------
+    def handle_response(response)
+      return false unless (response && response.code == 200)
+      return Hash.from_xml(response)
     end
 
   end

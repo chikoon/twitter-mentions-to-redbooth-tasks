@@ -23,6 +23,9 @@ module TweetStream
       Rails.logger.debug("client: #{clnt.inspect}")
       clnt
     end
+    def authenticated?
+      (client && client.access_token) ? true : false
+    end
   end
 
 end

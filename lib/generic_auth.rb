@@ -4,9 +4,9 @@ class GenericAuth
 
   def initialize(args={})
     raise "Invalid arguments" unless valid_args?(args)
-    @oauth_client = args[:oauth_client]
+    @oauth_client = args[:oauth_client] 
   end
-  def refreshable?; (access_token && expired?); end
+  def need_refresh?; (access_token && expired?); end
   def authenticated?; (access_token.present? && !expired?); end
   def expired?;       !token_expires.present? || (token_expires.to_i < (DateTime.now + 1.minute).to_i); end
   def valid_args?(args={})
